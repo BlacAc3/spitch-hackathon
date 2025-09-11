@@ -131,7 +131,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 # static files must be located in the 'static' directory inside each app
 # if you want static files to be in the root directory, you must configure STATICFILES_DIRS like below:
 STATICFILES_DIRS = [
