@@ -31,7 +31,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-hk9y5aip3ggirbq2h%l#)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = [ gethostname(), ] + list(set(gethostbyname_ex(gethostname())[2]))
+# This method of getting the hostname did not work as expected
+# ALLOWED_HOSTS = [ gethostname(), ] + list(set(gethostbyname_ex(gethostname())[2]))
+ALLOWED_HOSTS = ['spitch-hackathon.vercel.app', 'localhost', '127.0.0.1', '.vercel.app']
 
 
 # Application definition
