@@ -13,15 +13,24 @@
         <!--Google Fonts-->
         <link
             href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-            rel="stylesheet"
-        />
+            rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Knewave&display=swap" rel="stylesheet">
-
+        <link href="https://fonts.googleapis.com/css2?family=Knewave&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <style>
+            .fade-in-onload {
+                opacity: 0;
+                transition: opacity 1s ease-in-out;
+            }
+        </style>
+        <script>
+            window.addEventListener('load', function() {
+                document.body.classList.remove('fade-in-onload');
+            });
+        </script>
     </head>
     <body
-        class="font-sans antialiased min-h-screen flex flex-col"
+        class="font-sans antialiased min-h-screen flex flex-col "
     >
         <nav class="p-4 ">
             <div
