@@ -1,0 +1,10 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('proverb_list/', views.proverb_list, name='proverb_list'),
+    path('input_proverb/', views.input_proverb, name='input_proverb'),
+    path('tts_proverb/<int:proverb_id>/', views.tts_proverb, name='tts_proverb'),
+    # path('api/generate-tts/', views.generate_tts_api, name='generate_tts_api'),
+]

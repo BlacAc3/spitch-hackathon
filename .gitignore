@@ -1,0 +1,31 @@
+# Build artifacts
+target/
+build/
+dist/
+# Python bytecode
+__pycache__/
+**/__pycache__/
+
+# Dependency directories
+node_modules/
+venv/
+
+# Operating system files
+.DS_Store
+
+# Environment files
+.env
+
+# Logs
+*.log
+
+# Packages
+*.swp
+*~
+*.backup
+*.tmp
+\#*#
+*.cache
+*.orig
+/tmp/
+/vscode/

@@ -1,0 +1,98 @@
+{% extends 'base.html' %} {% block title %}Home - Yoruba Proverb TTS{% endblock %}
+{% block content %}
+    <h1 class="text-4xl font-bold text-slate-800 knewave-regular  mb-2">
+        Welcome to Yoruba Proverb Text To Speech!
+    </h1>
+    <p class="text-lg text-onSurface mb-8 italic">
+        Our goal is to preserve the rich Yoruba language and its timeless proverbs
+        by providing an interactive platform for users to listen to and input
+        proverbs.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
+        <div
+            class="bg-white/70 backdrop-blur-md p-8 border-2 border-slate-500 rounded-lg shadow-md hover:shadow-2xl hover:backdrop-blur-lg hover:bg-slate-300/80 hover:scale-[1.01] transition duration-200"
+        >
+            <h2 class="text-2xl font-bold text-slate-800 mb-3">
+                Explore Proverbs
+            </h2>
+            <p class="text-onSurface mb-8 italic">
+                Browse a comprehensive list of Yoruba proverbs and listen to their
+                text-to-speech renditions.
+            </p>
+            <a
+                href="{% url 'proverb_list' %}"
+                class="inline-flex items-center justify-center bg-orange-400 text-onPrimary font-medium py-3 px-6 rounded-full shadow-md hover:shadow-lg transition duration-200"
+            >
+                <svg
+                    class="w-5 h-5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M10 18c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h4c.55 0 1 .45 1 1v4c0 .55-.45 1-1 1h-4zm0-6h4v4h-4v-4zm0 6h4v4h-4v-4zM22 6v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-2 0H4v2h16V6zm0 12V8H4v10h16z"
+                    />
+                </svg>
+                View Proverbs
+            </a>
+        </div>
+
+        <div
+            class="bg-surface/70 backdrop-blur-md border-2 border-slate-500 hover:backdrop-blur-lg hover:bg-slate-300/80 hover:scale-[1.01] p-8 rounded-lg shadow-md hover:shadow-xl transition duration-200"
+        >
+            <h2 class="text-2xl font-bold text-slate-800  mb-3">
+                Input Your Own
+            </h2>
+            <p class="text-onSurface mb-8 italic">
+                Contribute to our growing collection by inputting your own Yoruba
+                proverbs or text to be read aloud.
+            </p>
+            <a
+                href="{% url 'input_proverb' %}"
+                class="inline-flex items-center justify-center bg-orange-400 text-onPrimary font-medium py-3 px-6 rounded-full shadow-md hover:shadow-lg transition duration-200"
+            >
+                <svg
+                    class="w-5 h-5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                Add Proverb
+            </a>
+        </div>
+
+        <div
+            class="bg-surface/70 backdrop-blur-md border-2 border-slate-500 hover:backdrop-blur-lg hover:bg-slate-300/80 hover:scale-[1.01] col-span-2 p-8 rounded-lg shadow-md hover:shadow-2xl transition duration-200"
+        >
+            <h2 class="text-2xl font-bold text-slate-800 mb-3 ">
+                Rate TTS Performance
+            </h2>
+            <p class="text-onSurface mb-8 italic">
+                Help us improve our Text-to-Speech system by rating the performance
+                based on various criteria. Your feedback is invaluable!
+            </p>
+            <p class="text-sm text-onSurface mb-4">
+                Competency assessment will be used to weigh ratings appropriately.
+            </p>
+            <a
+                href="{% url 'proverb_list' %}"
+                class="inline-flex items-center justify-center bg-orange-400 text-onPrimary font-medium py-3 px-6 rounded-full shadow-md hover:shadow-lg transition duration-200 mt-4"
+            >
+                <svg
+                    class="w-5 h-5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                    />
+                </svg>
+                Rate TTS
+            </a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title %}Yoruba TTS Playback{% endblock %}
+{%block content %}
+<div class="mb-14 flex items-center text-left">
+    <a
+        href="{% url 'proverb_list' %}"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
+        &#x2190; Back to Proverb List
+    </a>
+</div>
+
+<h1 class="text-3xl font-bold text-slate-800 mb-6">Yoruba Text-to-Speech</h1>
+
+{# Section for displaying details and playing TTS of an existing proverb #}
+<div class="bg-surface border border-stone-800 p-6 rounded-xl shadow-md mb-8">
+    {% if proverb %}
+    <div class="proverb-card rounded-md shadow-sm mb-4">
+        <p class="text-3xl font-semibold italic text-onBackground mb-2">
+            "{{ proverb.text }}"
+        </p>
+    </div>
+    <div
+        class="translation-card p-4 rounded-md shadow-sm border border-slate-500 mb-6"
+    >
+        <p class="text-lg text-onSurface">
+            <strong>Translation:</strong> {{ proverb.translation }}
+        </p>
+    </div>
+
+    <div
+        id="current-proverb-audio"
+        class="mb-6 bg-background p-2 rounded-md shadow-sm border border-border"
+    >
+        <!--<h3 class="text-xl font-semibold text-onBackground mb-3">
+            Listen to Audio:
+        </h3>-->
+        <audio controls class="w-full">
+            <source src="{{ audio_url }}" type="audio/mpeg" />
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    {% else %}
+    <p class="text-onBackground">No specific proverb selected.</p>
+    {% endif %}
+</div>
+
+<!--<div class="mt-8 text-center">
+    <a
+        href="{% url 'proverb_list' %}"
+        class="text-primary hover:underline transition duration-200"
+    >
+        Back to Proverb List
+    </a>
+</div>-->
+
+{% endblock %}

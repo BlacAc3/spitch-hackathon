@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block title %}Proverbs List - Yoruba Proverb
+    TTS{%endblock %} {% block content %}
+        <div class="container mx-auto p-4" style="max-height: 400px; overflow-y: auto;">
+            <h1 class="text-3xl font-bold mb-4 text-slate-800">Yoruba Proverbs</h1>
+
+            <div class="mb-4">
+                <input
+                    type="text"
+                    id="searchProverb"
+                    class="w-full p-2 border border-slate-800 rounded shadow-lg"
+                    placeholder="Search Proverbs..."
+                />
+            </div>
+
+            {% if proverbs %}
+                <ul id="proverbList" class="mt-12 rounded-lg">
+                    {% for proverb in proverbs %}
+                        <li
+                            class="py-4 mb-8 rounded-lg transition-colors duration-300 backdrop-blur-lg bg-white/30 border border-stone-700 hover:bg-stone-400/60"
+                        >
+                            <a
+                                href="{% url 'tts_proverb' proverb.id %}"
+                                class="block py-3 px-6 rounded"
+                            >
+                                <p class="text-xl font-medium knewave-light text-gray-800">
+                                    {{ proverb.text }}
+                                </p>
+                                <p class="text-gray-700 text-lg italic">{{ proverb.translation }}</p>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-500">No proverbs available.</p>
+            {% endif %}
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const searchInput = document.getElementById("searchProverb");
+                    const proverbList = document.getElementById("proverbList");
+                    const proverbs = proverbList.getElementsByTagName("li");
+
+                    searchInput.addEventListener("input", function () {
+                        const searchTerm = searchInput.value.toLowerCase();
+
+                        for (let i = 0; i < proverbs.length; i++) {
+                            const proverb = proverbs[i];
+                            const text = proverb.textContent.toLowerCase();
+
+                            if (text.includes(searchTerm)) {
+                                proverb.style.display = "";
+                            } else {
+                                proverb.style.display = "none";
+                            }
+                        }
+                    });
+                });
+            </script>
+        </div>
+    {% endblock %}

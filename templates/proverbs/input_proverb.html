@@ -1,0 +1,66 @@
+{% extends 'base.html' %} {% block title %}Input Proverb - Yoruba Proverb TTS
+{%endblock %} {% block content %}
+    <div class="mb-8 flex items-center text-left">
+        <a
+            href="{% url 'proverb_list' %}"
+            class="bg-orange-500 hover:bg-opacity-80 transition-all duration-300 text-white font-bold py-2 px-4 rounded-xl"
+        >
+            &#x2190; Back to Proverb List
+        </a>
+    </div>
+    <div class="p-10 bg-slate-400 border border-stone-800 rounded-xl backdrop-blur-sm bg-opacity-90 ">
+
+        <div>
+            <h1 class="text-3xl font-bold text-slate-800 ">
+                Input Your Own Yoruba Proverb
+            </h1>
+            <p class="text-onSurface italic">
+                Share your knowledge! Enter a Yoruba proverb or text below to be added
+                to our collection and made available for text-to-speech conversion.
+            </p>
+        </div>
+
+        <div class=" px-4 rounded-lg ">
+            <form method="post" class="space-y-12">
+                {% csrf_token %}
+                <div>
+                    <label
+                        for="proverb_text"
+                        class="block text-lg font-medium text-onSurface mb-2"
+                    >Yoruba Proverb/Text:</label
+                        >
+                        <textarea
+                            id="proverb_text"
+                            name="proverb_text"
+                            rows="6"
+                            required
+                            class="mt-1 block w-full px-4 py-3 border border-gray-800 rounded-md shadow-sm  bg-background text-onBackground placeholder:text-gray-500 text-base"
+                            placeholder="E.g., Ọrọ kan l'ogbon, ọrọ meji l'oye."
+                        ></textarea>
+                    </div>
+                    <div>
+                        <label
+                            for="translation_text"
+                            class="block text-lg font-medium text-onSurface mb-2"
+                        >English Translation (Optional):</label
+                            >
+                            <textarea
+                                id="translation_text"
+                                name="translation_text"
+                                rows="3"
+                                class="mt-1 block w-full px-4 py-3 border border-gray-800 rounded-md shadow-sm  bg-background text-onBackground placeholder:text-gray-500 text-base"
+                                placeholder="E.g., One word is wisdom, two words is understanding."
+                            ></textarea>
+                        </div>
+                        <div>
+                            <button
+                                type="submit"
+                                class="w-fit mx-auto bg-orange-400 text-onPrimary font-bold py-3 px-4 rounded-md shadow-md hover:shadow-lg transition duration-300 hover:bg-opacity-80 text-lg"
+                            >
+                                Submit Proverb
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+{% endblock %}
