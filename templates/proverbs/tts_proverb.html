@@ -9,36 +9,42 @@
         </a>
     </div>
 
-    <h1 class="text-3xl font-bold text-slate-800 mb-6">Yoruba Text-to-Speech</h1>
+    <!--<h1 class="text-3xl font-bold text-slate-800 mb-6">Yoruba Text-to-Speech</h1>-->
 
 {# Section for displaying details and playing TTS of an existing proverb #}
-    <div class="bg-slate-300 border border-stone-800 p-6 rounded-xl shadow-md mb-8 backdrop-blur-md bg-opacity-80">
+    <div class="bg-white flex flex-col gap-8 border border-stone-800 p-6 rounded-xl shadow-md mb-8 backdrop-blur-md bg-opacity-80">
         {% if proverb %}
-            <div class="proverb-card rounded-md mb-4">
-                <p class="text-3xl font-semibold italic text-onBackground mb-2">
-                    "{{ proverb.text }}"
-                </p>
-            </div>
-            <div
-                class="translation-card p-4 rounded-md shadow-sm border border-slate-500 mb-6"
-            >
-                <p class="text-lg text-onSurface">
-                    <strong>Translation:</strong> {{ proverb.translation }}
-                </p>
+            <div>
+                <div class="proverb-card rounded-md ">
+                    <p class="text-xl sm:text-3xl font-semibold italic text-onBackground ">
+                        "{{ proverb.text }}"
+                    </p>
+                </div>
+                <div
+                    class="translation-card p-2 sm:p-4  border-slate-500 "
+                >
+                    <p class="sm:text-lg text-onSurface">
+                        <strong>Translation:</strong> {{ proverb.translation }}
+                    </p>
+                </div>
             </div>
 
             <div
                 id="current-proverb-audio"
-                class="mb-6 bg-background p-2 rounded-md shadow-sm border border-border"
+                class=" bg-background sm:p-2 rounded-full sm:rounded-md shadow-sm border border-border"
             >
-        <!--<h3 class="text-xl font-semibold text-onBackground mb-3">
-            Listen to Audio:
-        </h3>-->
                 <audio controls class="w-full rounded">
                     <source src="{{ proverb.audio.url }}" type="audio/mpeg" />
                     Your browser does not support the audio element.
                 </audio>
             </div>
+
+            <a
+                href="{% url 'rate_proverb' proverb_id=proverb.id %}"
+                class="bg-blue-500 w-fit text-white font-bold py-2 px-4 rounded"
+            >
+                Rate this Proverb
+            </a>
 
         {% else %}
             <p class="text-onBackground">No specific proverb selected.</p>
