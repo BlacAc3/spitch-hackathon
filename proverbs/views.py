@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
+from django.views.decorators.cache import cache_page
 from django.conf import settings
 from spitch import Spitch
 from .models import Proverb  # Import the Proverb model
@@ -13,6 +12,8 @@ def home(request):
     return render(request, 'proverbs/home.html')
 
 
+
+@cache_page(60 * 60 * 24)  # Cache for 24 hours
 def proverb_list(request):
     proverbs = Proverb.objects.all().order_by('text')  # Fetch all proverbs from the database
     context = {'proverbs': proverbs}
