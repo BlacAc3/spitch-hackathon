@@ -291,13 +291,13 @@
 
                 if (!allQuestionsAnswered) {
                     event.preventDefault(); // Stop form submission
-                    alert('Please answer all questions before submitting.');
+                    // alert('Please answer all questions before submitting.');
 
                 // Scroll to the first unanswered question if found
                     if (firstUnansweredQuestionElement) {
                         firstUnansweredQuestionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     // Optionally, highlight the unanswered section
-                        firstUnansweredQuestionElement.style.border = '2px solid red';
+                        firstUnansweredQuestionElement.style.cssText = 'border: 2px solid red; padding: 1rem; border-radius: 0.5rem;';
                         setTimeout(() => {
                             firstUnansweredQuestionElement.style.border = ''; // Remove highlight after a short delay
                         }, 3000);
