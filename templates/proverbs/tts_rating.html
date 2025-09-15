@@ -1,97 +1,261 @@
-{% extends 'base.html' %}
-
+{% extends 'base.html' %} {% block title %}Rate Proverb - Yoruba Proverb TTS{% endblock %}
 {% block content %}
-    <div class="mb-14 flex items-center text-left">
-        <a
-            href="{% url 'proverb_list' %}"
-            class="bg-orange-500 text-white font-bold py-2 px-4 rounded backdrop-blur-md bg-opacity-80"
-        >
-            &#x2190; Back to Proverb List
-        </a>
-    </div>
+    <div class="container mx-auto sm:p-4 pb-8">
+        <div class="mb-8 flex items-center text-left">
+            <a
+                href="{% url 'proverb_list' %}"
+                class="bg-orange-500 text-white font-bold py-2 px-4 rounded-lg shadow-md backdrop-blur-md bg-opacity-80 hover:bg-orange-600 transition-colors"
+            >
+                &#x2190; Back to Proverb List
+            </a>
+        </div>
 
-    <h1 class="text-3xl font-bold text-slate-800 mb-6">Yoruba TTS Rating</h1>
+        <h1 class="text-3xl font-bold text-slate-800 mb-8 knewave-regular">
+            Yoruba TTS Rating
+        </h1>
 
-    <div class="bg-slate-300 border border-stone-800 p-6 rounded-xl shadow-md mb-8 backdrop-blur-md bg-opacity-80">
-        <form id="tts-rating-form" method="post">
+        <form id="tts-rating-form" method="post" action="{% url 'rate_proverb' proverb.id %}" class="space-y-8">
             {% csrf_token %}
 
-            <h2>Section 1: Initial Assessment (Competence Check)</h2>
+            <!-- Section 1: Competence Check -->
+            <div
+                class="py-6 px-4 sm:px-8 rounded-lg backdrop-blur-lg bg-white/40 border border-stone-700 shadow-lg"
+            >
+                <h2
+                    class="text-2xl font-bold text-slate-700 mb-6 border-b border-stone-500 pb-2"
+                >
+                    Section 1: Initial Assessment
+                </h2>
 
-            <p><b>Question 1:</b> Yoruba is a tonal language. What does this mean in the context of spoken words?</p>
-            <label><input type="radio" name="q1" value="A"> A) It means the words are pronounced with varying loudness.</label><br>
-            <label><input type="radio" name="q1" value="B"> B) It means the pitch of a syllable can change the meaning of a word.</label><br>
-            <label><input type="radio" name="q1" value="C"> C) It means the speed at which words are spoken can change their meaning.</label><br>
-            <label><input type="radio" name="q1" value="D"> D) It means the words have a rhythmic pattern, like music.</label><br>
+                <!-- Question 1 -->
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3">
+                        <b>Question 1:</b> Yoruba is a tonal language. What does this
+                        mean in the context of spoken words?
+                    </p>
+                    <div class="space-y-2">
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input
+                                type="radio"
+                                name="q1"
+                                value="A"
+                                class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"
+                            />
+                            <span>A) It means the words are pronounced with varying loudness.</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input
+                                type="radio"
+                                name="q1"
+                                value="B"
+                                class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"
+                            />
+                            <span>B) It means the pitch of a syllable can change the meaning of a word.</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input
+                                type="radio"
+                                name="q1"
+                                value="C"
+                                class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"
+                            />
+                            <span>C) It means the speed at which words are spoken can change their meaning.</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input
+                                type="radio"
+                                name="q1"
+                                value="D"
+                                class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"
+                            />
+                            <span>D) It means the words have a rhythmic pattern, like music.</span>
+                        </label>
+                    </div>
+                </div>
 
-            <p><b>Question 2:</b> Consider the Yoruba words `ìyà` and `ìyá`. How do their meanings differ?</p>
-            <label><input type="radio" name="q2" value="A"> A) `ìyà` means 'mother' and `ìyá` means 'suffering'.</label><br>
-            <label><input type="radio" name="q2" value="B"> B) `ìyà` means 'suffering' and `ìyá` means 'mother'.</label><br>
-            <label><input type="radio" name="q2" value="C"> C) They are pronounced the same but spelled differently.</label><br>
-            <label><input type="radio" name="q2" value="D"> D) They have the same meaning.</label><br>
+                <!-- Question 2 -->
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3">
+                        <b>Question 2:</b> Consider the Yoruba words `ìyà` and `ìyá`.
+                        How do their meanings differ?
+                    </p>
+                    <div class="space-y-2">
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input type="radio" name="q2" value="A" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300" />
+                            <span>A) `ìyà` means 'mother' and `ìyá` means 'suffering'.</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input type="radio" name="q2" value="B" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300" />
+                            <span>B) `ìyà` means 'suffering' and `ìyá` means 'mother'.</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input type="radio" name="q2" value="C" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300" />
+                            <span>C) They are pronounced the same but spelled differently.</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input type="radio" name="q2" value="D" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300" />
+                            <span>D) They have the same meaning.</span>
+                        </label>
+                    </div>
+                </div>
 
-            <p><b>Question 3:</b> The word `owó` can have multiple meanings in Yoruba depending on its tones. Which of the following is NOT a possible meaning for a word with the letters 'owo'?</p>
-            <label><input type="radio" name="q3" value="A"> A) money</label><br>
-            <label><input type="radio" name="q3" value="B"> B) respect</label><br>
-            <label><input type="radio" name="q3" value="C"> C) business</label><br>
-            <label><input type="radio" name="q3" value="D"> D) water</label><br>
+                <!-- Question 3 -->
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3">
+                        <b>Question 3:</b> The word `owó` can have multiple meanings in
+                        Yoruba depending on its tones. Which of the following is NOT a
+                        possible meaning for a word with the letters 'owo'?
+                    </p>
+                    <div class="space-y-2">
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input type="radio" name="q3" value="A" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300" />
+                            <span>A) money</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input type="radio" name="q3" value="B" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300" />
+                            <span>B) respect</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input type="radio" name="q3" value="C" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300" />
+                            <span>C) business</span>
+                        </label>
+                        <label
+                            class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"
+                        >
+                            <input type="radio" name="q3" value="D" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300" />
+                            <span>D) water</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-            <hr>
+            <!-- Section 2: Proverb Evaluation -->
+            <div class="py-6 px-4 sm:px-8 rounded-lg backdrop-blur-lg bg-white/40 border border-stone-700 shadow-lg">
+                <h2 class="text-2xl font-bold text-slate-700 mb-6 border-b border-stone-500 pb-2">
+                    Section 2: Proverb Evaluation
+                </h2>
 
-            <h2>Section 2: Proverb Evaluation (Rating Questions)</h2>
+                {% if proverb_rating %}
+                    <div class="my-4 p-4 bg-slate-100/50 rounded-lg border border-slate-400">
+                        <p class="text-lg font-semibold text-gray-800 mb-2">Proverb:</p>
+                        <blockquote class="text-xl italic text-gray-900">
+                            "{{ proverb.text }}"
+                        </blockquote>
+                        <audio controls class="w-full mt-4">
+                            <source src="{{ proverb.audio.url }}" type="audio/mpeg" />
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                {% endif %}
 
-            <p><b>Proverb:</b> {{ proverb.text }}</p>
-            <audio controls>
-                <source src="{{ proverb.audio.url }}" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
+                <!-- Questions 4 - 9 -->
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3"><b>Question 4:</b> Intelligibility (Word Clarity) - On a scale of 1 to 5, how clear and distinct were the individual words in the proverb?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q4" value="1" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>1 (Very unclear, difficult to understand)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q4" value="2" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>2 (Somewhat unclear)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q4" value="3" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>3 (Neutral)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q4" value="4" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>4 (Clear)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q4" value="5" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>5 (Very clear, all words are perfectly discernible)</span></label>
+                    </div>
+                </div>
 
-            <p><b>Question 4:</b> Intelligibility (Word Clarity) - On a scale of 1 to 5, how clear and distinct were the individual words in the proverb?</p>
-            <label><input type="radio" name="q4" value="1"> 1 (Very unclear, difficult to understand)</label><br>
-            <label><input type="radio" name="q4" value="2"> 2 (Somewhat unclear)</label><br>
-            <label><input type="radio" name="q4" value="3"> 3 (Neutral)</label><br>
-            <label><input type="radio" name="q4" value="4"> 4 (Clear)</label><br>
-            <label><input type="radio" name="q4" value="5"> 5 (Very clear, all words are perfectly discernible)</label><br>
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3"><b>Question 5:</b> Intelligibility (Segmentation) - Did the TTS system merge or split words unnaturally, making it sound disjointed?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q5" value="A" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>A) Yes, words were merged or split unnaturally.</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q5" value="B" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>B) No, the flow between words was natural.</span></label>
+                    </div>
+                </div>
 
-            <p><b>Question 5:</b> Intelligibility (Segmentation) - Did the TTS system merge or split words unnaturally, making it sound disjointed?</p>
-            <label><input type="radio" name="q5" value="A"> A) Yes, words were merged or split unnaturally.</label><br>
-            <label><input type="radio" name="q5" value="B"> B) No, the flow between words was natural.</label><br>
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3"><b>Question 6:</b> Tone Accuracy - How accurate were the tones (High, Mid, Low) in the proverb? Did any incorrect tones change the meaning of a word?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q6" value="1" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>1 (Completely inaccurate, meaning was lost or distorted)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q6" value="2" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>2 (Mostly inaccurate, several words had wrong tones)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q6" value="3" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>3 (Neutral)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q6" value="4" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>4 (Mostly accurate, minor tone errors)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q6" value="5" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>5 (Perfectly accurate, all tones were correct)</span></label>
+                    </div>
+                </div>
 
-            <p><b>Question 6:</b> Tone Accuracy - How accurate were the tones (High, Mid, Low) in the proverb? Did any incorrect tones change the meaning of a word?</p>
-            <label><input type="radio" name="q6" value="1"> 1 (Completely inaccurate, meaning was lost or distorted)</label><br>
-            <label><input type="radio" name="q6" value="2"> 2 (Mostly inaccurate, several words had wrong tones)</label><br>
-            <label><input type="radio" name="q6" value="3"> 3 (Neutral)</label><br>
-            <label><input type="radio" name="q6" value="4"> 4 (Mostly accurate, minor tone errors)</label><br>
-            <label><input type="radio" name="q6" value="5"> 5 (Perfectly accurate, all tones were correct)</label><br>
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3"><b>Question 7:</b> Naturalness (Fluency and Voice Quality) - How would you describe the overall sound of the voice?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q7" value="A" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>A) It sounds very "machine-like" or robotic, with glitches or a stilted rhythm.</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q7" value="B" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>B) It sounds unnatural but understandable.</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q7" value="C" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>C) It has some natural qualities but still sounds synthetic.</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q7" value="D" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>D) It sounds very fluent and smooth, with a pleasant and natural voice quality.</span></label>
+                    </div>
+                </div>
 
-            <p><b>Question 7:</b> Naturalness (Fluency and Voice Quality) - How would you describe the overall sound of the voice?</p>
-            <label><input type="radio" name="q7" value="A"> A) It sounds very "machine-like" or robotic, with glitches or a stilted rhythm.</label><br>
-            <label><input type="radio" name="q7" value="B"> B) It sounds unnatural but understandable.</label><br>
-            <label><input type="radio" name="q7" value="C"> C) It has some natural qualities but still sounds synthetic.</label><br>
-            <label><input type="radio" name="q7" value="D"> D) It sounds very fluent and smooth, with a pleasant and natural voice quality.</label><br>
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3"><b>Question 8:</b> Naturalness (Accent Authenticity) - Does the TTS pronunciation sound like a native Yoruba speaker?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q8" value="A" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>A) No, it sounds like a foreign accent.</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q8" value="B" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>B) It sounds somewhat authentic, but with noticeable foreign influence.</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q8" value="C" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>C) Yes, it sounds like a native Yoruba speaker.</span></label>
+                    </div>
+                </div>
 
-            <p><b>Question 8:</b> Naturalness (Accent Authenticity) - Does the TTS pronunciation sound like a native Yoruba speaker?</p>
-            <label><input type="radio" name="q8" value="A"> A) No, it sounds like a foreign accent.</label><br>
-            <label><input type="radio" name="q8" value="B"> B) It sounds somewhat authentic, but with noticeable foreign influence.</label><br>
-            <label><input type="radio" name="q8" value="C"> C) Yes, it sounds like a native Yoruba speaker.</label><br>
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3"><b>Question 9:</b> Semantic Correctness - Based on your understanding, did the TTS model's pronunciation retain the correct meaning of the proverb?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q9" value="A" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>A) No, the meaning was significantly changed or lost.</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q9" value="B" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>B) The meaning was partially retained, but with errors.</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q9" value="C" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>C) Yes, the proverb's original meaning was perfectly preserved.</span></label>
+                    </div>
+                </div>
+            </div>
 
-            <p><b>Question 9:</b> Semantic Correctness - Based on your understanding, did the TTS model's pronunciation retain the correct meaning of the proverb?</p>
-            <label><input type="radio" name="q9" value="A"> A) No, the meaning was significantly changed or lost.</label><br>
-            <label><input type="radio" name="q9" value="B"> B) The meaning was partially retained, but with errors.</label><br>
-            <label><input type="radio" name="q9" value="C"> C) Yes, the proverb's original meaning was perfectly preserved.</label><br>
+            <!-- Section 3: Overall Impression -->
+            <div class="py-6 px-4 sm:px-8 rounded-lg backdrop-blur-lg bg-white/40 border border-stone-700 shadow-lg">
+                <h2 class="text-2xl font-bold text-slate-700 mb-6 border-b border-stone-500 pb-2">
+                    Section 3: Overall Impression
+                </h2>
 
-            <hr>
+                <div class="mb-6">
+                    <p class="font-semibold text-gray-800 mb-3"><b>Question 10:</b> Overall Rating - Based on all the aspects you've evaluated (intelligibility, tone, naturalness), how would you rate the TTS system's performance on this proverb?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q10" value="1" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>1 (Very Poor)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q10" value="2" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>2 (Poor)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q10" value="3" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>3 (Fair)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q10" value="4" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>4 (Good)</span></label>
+                        <label class="flex items-center p-3 rounded-lg hover:bg-stone-200/50 cursor-pointer transition-colors"><input type="radio" name="q10" value="5" class="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300"> <span>5 (Excellent)</span></label>
+                    </div>
+                </div>
+            </div>
 
-            <h2>Section 3: Overall Impression</h2>
-
-            <p><b>Question 10:</b> Overall Rating - Based on all the aspects you've evaluated (intelligibility, tone, naturalness), how would you rate the TTS system's performance on this proverb?</p>
-            <label><input type="radio" name="q10" value="1"> 1 (Very Poor)</label><br>
-            <label><input type="radio" name="q10" value="2"> 2 (Poor)</label><br>
-            <label><input type="radio" name="q10" value="3"> 3 (Fair)</label><br>
-            <label><input type="radio" name="q10" value="4"> 4 (Good)</label><br>
-            <label><input type="radio" name="q10" value="5"> 5 (Excellent)</label><br>
-
-            <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded">Submit Rating</button>
+            <div class="mt-8 text-center">
+                <button
+                    type="submit"
+                    class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-green-700 transition-transform transform hover:scale-105"
+                >
+                    Submit Rating
+                </button>
+            </div>
         </form>
     </div>
 {% endblock %}

@@ -1,5 +1,97 @@
 {% extends 'base.html' %} {% block title %}Input Proverb - Orature
-{%endblock %} {% block content %}
+{%endblock %}
+
+
+
+
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const generateBtn = document.getElementById('generate-tts-btn');
+            const proverbTextarea = document.getElementById('proverb_text');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const audioContainer = document.getElementById('audio-player-container');
+            const ttsError = document.getElementById('tts-error');
+
+// Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            generateBtn.addEventListener('click', async function () {
+                const proverbText = proverbTextarea.value.trim();
+                if (!proverbText) {
+                    alert('Please enter some Yoruba text to generate audio.');
+                    return;
+                }
+                console.log('Generating audio...for text', proverbText);
+
+// Reset UI for retry
+                audioContainer.innerHTML = '';
+                ttsError.classList.add('hidden');
+                ttsError.textContent = '';
+
+// Show loading state
+                generateBtn.classList.add('hidden');
+                loadingSpinner.classList.remove('hidden');
+
+                try {
+                    const response = await fetch("{% url 'generate_tts_api' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({ text: proverbText })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({ error: 'An unknown error occurred while processing the audio.' }));
+                        throw new Error(errorData.error || `Server error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.audio_data_base64) {
+                        const audioDataUrl = `data:audio/mpeg;base64,${data.audio_data_base64}`;
+                        const audio = document.createElement('audio');
+                        audio.src = audioDataUrl;
+                        audio.controls = true;
+                        audio.classList.add('w-full', 'mt-2');
+                        audioContainer.appendChild(audio);
+
+      // Successfully generated, hide spinner. Button is already hidden.
+                        loadingSpinner.classList.add('hidden');
+                    } else {
+                        throw new Error('API did not return valid audio data.');
+                    }
+
+                } catch (error) {
+                    console.error('Error generating TTS:', error);
+                    ttsError.textContent = `Failed to generate audio: ${error.message}`;
+                    ttsError.classList.remove('hidden');
+
+    // On error, hide spinner and show button again to allow retry
+                    loadingSpinner.classList.add('hidden');
+                    generateBtn.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
     <div class="mb-8 flex items-center text-left">
         <a
             href="{% url 'proverb_list' %}"
@@ -37,6 +129,28 @@
                             class="mt-1 block w-full px-4 py-3 border border-gray-800 rounded-md shadow-sm  bg-background text-onBackground placeholder:text-gray-500 text-base"
                             placeholder="E.g., Ọrọ kan l'ogbon, ọrọ meji l'oye."
                         ></textarea>
+
+                        <div id="tts-controls" class="mt-4 flex flex-col items-start space-y-4">
+                            <button
+                                type="button"
+                                id="generate-tts-btn"
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md shadow-sm transition duration-300 flex items-center space-x-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Generate Audio Preview</span>
+                            </button>
+                            <div id="loading-spinner" class="flex hidden items-center space-x-2 text-gray-600">
+                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>Generating audio... Please wait.</span>
+                            </div>
+                            <div id="audio-player-container" class="w-full"></div>
+                            <p id="tts-error" class="hidden text-red-500 text-sm"></p>
+                        </div>
                     </div>
                     <div>
                         <label

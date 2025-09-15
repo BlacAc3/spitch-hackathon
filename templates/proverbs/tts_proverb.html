@@ -1,4 +1,77 @@
 {% extends 'base.html' %}
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioContainer = document.getElementById('current-proverb-audio');
+
+        // Exit if proverb data is not available (e.g., if 'proverb' is not in context)
+            if (!audioContainer || !audioContainer.dataset.proverbText || !audioContainer.dataset.ttsApiUrl) {
+                if (audioContainer) {
+                    audioContainer.innerHTML = '<p class="text-red-500">Error: Proverb data or API URL not found.</p>';
+                }
+                return;
+            }
+
+            const proverbText = audioContainer.dataset.proverbText;
+            const ttsApiUrl = audioContainer.dataset.ttsApiUrl;
+
+        // Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            const csrftoken = getCookie('csrftoken');
+
+            fetch("{% url 'generate_tts_api' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                // Include CSRF token for POST requests, even if endpoint is csrf_exempt, for consistency
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ text: proverbText })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                // Try to parse error message from JSON response
+                        return response.json().then(err => {
+                            throw new Error(err.error || `HTTP error! Status: ${response.status}`);
+                        }, () => {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.encoded_audio_url) {
+                        audioContainer.innerHTML = `
+                    <audio controls class="w-full rounded">
+                        <source src="${data.encoded_audio_url}" type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                    </audio>
+                `;
+                    } else {
+                        audioContainer.innerHTML = '<p class="text-red-500">Error: Audio URL not found in response.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching TTS:', error);
+                    audioContainer.innerHTML = `<p class="text-red-500">Failed to generate audio: ${error.message}</p>`;
+                });
+        });
+    </script>
+{% endblock %}
+
 {%block content %}
     <div class="mb-14 flex items-center text-left">
         <a
@@ -24,19 +97,22 @@
                     class="translation-card p-2 sm:p-4  border-slate-500 "
                 >
                     <p class="sm:text-lg text-onSurface">
-                        <strong>Translation:</strong> {{ proverb.translation }}
+                        <strong>Meaning:</strong> {{ proverb.translation }}
                     </p>
                 </div>
             </div>
 
             <div
                 id="current-proverb-audio"
-                class=" bg-background sm:p-2 rounded-full sm:rounded-md shadow-sm border border-border"
+                class="bg-background sm:p-2 rounded-full sm:rounded-md shadow-sm border border-border flex justify-center items-center min-h-[64px]"
+                data-proverb-text="{{ proverb.text }}"
+                data-tts-api-url="{% url 'generate_tts_api' %}"
             >
-                <audio controls class="w-full rounded">
-                    <source src="{{ proverb.audio.url }}" type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                </audio>
+                {# Initial loading spinner. This will be replaced by the audio player once TTS is generated. #}
+                <div class="flex flex-col items-center justify-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+                    <p class="text-gray-600 mt-2">Generating audio...</p>
+                </div>
             </div>
 
             <a
@@ -50,14 +126,5 @@
             <p class="text-onBackground">No specific proverb selected.</p>
         {% endif %}
     </div>
-
-<!--<div class="mt-8 text-center">
-    <a
-        href="{% url 'proverb_list' %}"
-        class="text-primary hover:underline transition duration-200"
-    >
-        Back to Proverb List
-    </a>
-</div>-->
 
 {% endblock %}

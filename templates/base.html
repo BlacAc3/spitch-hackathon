@@ -28,18 +28,20 @@
                 document.body.classList.remove('fade-in-onload');
             });
         </script>
+
+        {% block script %} {% endblock script %}
     </head>
     <body
         class="font-sans antialiased min-h-screen flex flex-col "
     >
         <nav class="p-4 ">
             <div
-                class="container mx-auto flex font-bold justify-between items-center text-slate-800"
+                class="container mx-auto flex sm:flex-row font-bold justify-between items-center text-slate-800"
             >
                 <a href="{% url 'home' %}" class="text-2xl sm:text-5xl knewave-regular hover:scale-[1.03] hover:text-slate-600 transition-all duration-300">Orature</a >
                 <a
                     href="{% url 'input_proverb' %}"
-                    class="flex items-center hover:bg-slate-600 hover:text-white  hover:bg-opacity-80 p-1 sm:p-4 rounded-full transition duration-300 sm:text-xl"
+                    class="flex flex-col sm:flex-row items-center hover:bg-slate-600 hover:text-white  hover:bg-opacity-80 p-1 sm:p-4 rounded-full transition duration-300 sm:text-xl"
                 >
                     <svg
                         class="w-6 h-6 mr-2"
@@ -49,7 +51,22 @@
                     >
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                     </svg>
-                    <div>Add Proverb</div></a >
+                    <div>Add Proverb</div>
+                </a>
+                <a
+                    href="{% url 'rating_results_general' %}"
+                    class="flex flex-col sm:flex-row items-center hover:bg-slate-600 hover:text-white hover:bg-opacity-80 p-1 sm:p-4 rounded-full transition duration-300 sm:text-xl"
+                >
+                    <svg
+                        class="w-6 h-6 mr-2"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z" />
+                    </svg>
+                    <div>View Rating</div>
+                </a>
             </div>
         </nav>
 

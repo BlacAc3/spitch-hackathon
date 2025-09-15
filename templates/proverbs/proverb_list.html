@@ -1,34 +1,143 @@
-{% extends 'base.html' %} {% block title %}Proverbs List - Yoruba Proverb
-    TTS{%endblock %} {% block content %}
-        <div class="container mx-auto sm:p-4 pb-0" >
-            <h1 class="text-3xl font-bold mb-4 knewave-regular text-slate-800">Yoruba Proverbs</h1>
+{% extends 'base.html' %}
+{% block title %}Proverbs List - Yoruba Proverb TTS{% endblock %}
+{% block script %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("searchProverb");
+            const tabButtons = document.querySelectorAll(".tab-button");
+            const tabContents = document.querySelectorAll(".tab-content");
 
-            <div class="mb-4 relative flex items-center">
-                <input
-                    type="text"
-                    id="searchProverb"
-                    class="w-full p-2 border border-slate-800 rounded shadow-lg "
-                    placeholder="Search Proverbs..."
-                />
-                <svg
-                    class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-800"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    ></path>
-                </svg>
-            </div>
+            function activateTab(tabId) {
+                // Deactivate all buttons and hide all content
+                tabButtons.forEach(button => {
+                    button.classList.remove("bg-stone-700", "text-white", "relative", "z-10", "-mb-px");
+                    button.classList.add("bg-white/30", "text-slate-800");
+                });
+                tabContents.forEach(content => {
+                    content.classList.add("hidden");
+                });
 
-            {% if proverbs %}
-                <ul id="proverbList" class="mt-12 rounded-lg" style="max-height: 450px; overflow-y: auto;">
-                    {% for proverb in proverbs %}
+                // Activate the selected button and show its content
+                const activeButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+                const activeContent = document.getElementById(tabId);
+
+                if (activeButton && activeContent) {
+                    activeButton.classList.add("bg-stone-700", "text-white", "relative", "z-10", "-mb-px");
+                    activeButton.classList.remove("bg-white/30", "text-slate-800");
+                    activeContent.classList.remove("hidden");
+                }
+
+                // Clear search input and re-apply filter for the new active tab
+                searchInput.value = '';
+                // Filter with empty string to show all proverbs in the newly active tab
+                filterProverbs('', activeContent.querySelector('ul'));
+            }
+
+            tabButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const tabId = this.dataset.tab;
+                    activateTab(tabId);
+                });
+            });
+
+            // Initial activation of the first tab if buttons exist
+            if (tabButtons.length > 0) {
+                activateTab(tabButtons[0].dataset.tab);
+            }
+
+            // Search functionality
+            searchInput.addEventListener("input", function () {
+                const searchTerm = searchInput.value.toLowerCase();
+                const activeContent = document.querySelector(".tab-content:not(.hidden)");
+                const activeProverbList = activeContent ? activeContent.querySelector("ul") : null;
+                if (activeProverbList) {
+                    filterProverbs(searchTerm, activeProverbList);
+                }
+            });
+
+            function filterProverbs(searchTerm, proverbListElement) {
+                if (!proverbListElement) return;
+
+                const proverbs = proverbListElement.getElementsByTagName("li");
+                let foundProverbs = 0;
+                for (let i = 0; i < proverbs.length; i++) {
+                    const proverb = proverbs[i];
+                    const text = proverb.textContent.toLowerCase();
+
+                    if (text.includes(searchTerm)) {
+                        proverb.style.display = "";
+                        foundProverbs++;
+                    } else {
+                        proverb.style.display = "none";
+                    }
+                }
+
+                const noProverbsMessage = proverbListElement.parentElement.querySelector('.no-proverbs-message');
+                if (noProverbsMessage) {
+                    if (proverbs.length === 0) {
+                        // Original "No proverbs available" when list is empty from backend
+                        noProverbsMessage.textContent = noProverbsMessage.dataset.originalMessage;
+                        noProverbsMessage.classList.remove("hidden");
+                    } else if (foundProverbs === 0) {
+                        // "No matching proverbs found." when list has items but search yields nothing
+                        noProverbsMessage.textContent = "No matching proverbs found.";
+                        noProverbsMessage.classList.remove("hidden");
+                    } else {
+                        noProverbsMessage.classList.add("hidden");
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock script %}
+{% block content %}
+    <div class="container mx-auto sm:p-4 pb-0" >
+        <h1 class="text-3xl font-bold mb-4 knewave-regular text-slate-800">Yoruba Proverbs</h1>
+
+        <div class="mb-4 relative flex items-center">
+            <input
+                type="text"
+                id="searchProverb"
+                class="w-full p-2 border border-slate-800 rounded shadow-lg "
+                placeholder="Search Proverbs..."
+            />
+            <svg
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-800"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+            </svg>
+        </div>
+
+        {# Tab buttons container #}
+        <div class="flex border-b border-stone-700 mb-4 mt-8">
+            <button
+                class="tab-button flex-1 py-2 px-4 text-center text-sm sm:text-lg font-semibold rounded-t-lg transition-colors duration-300 border border-stone-700 border-b-0 ml-2 first:ml-0"
+                data-tab="systemProverbs"
+            >
+                System Proverbs {% if system_proverbs %} ({{ system_proverbs|length }}) {% endif %}
+            </button>
+            <button
+                class="tab-button flex-1 py-2 px-4 text-center text-sm sm:text-lg font-semibold rounded-t-lg transition-colors duration-300 border border-stone-700 border-b-0 ml-2"
+                data-tab="userProverbs"
+            >
+                User Proverb Input {% if user_proverbs %} ({{ user_proverbs|length }}) {% endif %}
+            </button>
+        </div>
+
+        {# Tab content for System Proverbs #}
+        <div id="systemProverbs" class="tab-content">
+            {% if system_proverbs %}
+                <ul class="mt-4 rounded-lg" style="max-height: 450px; overflow-y: auto;">
+                    {% for proverb in system_proverbs %}
                         <li
                             class="py-4 mb-8 rounded-lg transition-colors duration-300 backdrop-blur-lg bg-white/30 border border-stone-700 hover:bg-stone-400/60"
                         >
@@ -36,7 +145,7 @@
                                 href="{% url 'tts_proverb' proverb.id %}"
                                 class="block py-1 px-3 sm:py-3 sm:px-6 rounded"
                             >
-                                <p class="text-sm sm:text-xl  font-bold text-gray-800">
+                                <p class="text-sm sm:text-xl font-bold text-gray-800">
                                     {{ proverb.text }}
                                 </p>
                                 <p class="text-gray-700 text-xs sm:text-lg italic">{{ proverb.translation }}</p>
@@ -44,31 +153,41 @@
                         </li>
                     {% endfor %}
                 </ul>
+                <p class="text-gray-500 mt-4 hidden no-proverbs-message" data-original-message="No system proverbs available."></p>
             {% else %}
-                <p class="text-gray-500">No proverbs available.</p>
+                <p class="text-gray-500 mt-4 no-proverbs-message" data-original-message="No system proverbs available.">No system proverbs available.</p>
             {% endif %}
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const searchInput = document.getElementById("searchProverb");
-                    const proverbList = document.getElementById("proverbList");
-                    const proverbs = proverbList.getElementsByTagName("li");
-
-                    searchInput.addEventListener("input", function () {
-                        const searchTerm = searchInput.value.toLowerCase();
-
-                        for (let i = 0; i < proverbs.length; i++) {
-                            const proverb = proverbs[i];
-                            const text = proverb.textContent.toLowerCase();
-
-                            if (text.includes(searchTerm)) {
-                                proverb.style.display = "";
-                            } else {
-                                proverb.style.display = "none";
-                            }
-                        }
-                    });
-                });
-            </script>
         </div>
-    {% endblock %}
+
+        {# Tab content for User Proverbs #}
+        <div id="userProverbs" class="tab-content hidden">
+            {% if user_proverbs %}
+                <ul class="mt-4 rounded-lg" style="max-height: 450px; overflow-y: auto;">
+                    {% for proverb in user_proverbs %}
+                        <li
+                            class="py-4 mb-8 rounded-lg transition-colors duration-300 backdrop-blur-lg bg-white/30 border border-stone-700 hover:bg-stone-400/60"
+                        >
+                            <a
+                                href="{% url 'tts_proverb' proverb.id %}"
+                                class="block py-1 px-3 sm:py-3 sm:px-6 rounded"
+                            >
+                                <p class="text-sm sm:text-xl font-bold text-gray-800">
+                                    {{ proverb.text }}
+                                </p>
+                                <p class="text-gray-700 text-xs sm:text-lg italic">{{ proverb.translation }}</p>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <p class="text-gray-500 mt-4 hidden no-proverbs-message" data-original-message="No user-submitted proverbs available."></p>
+            {% else %}
+                <p class="text-gray-500 mt-4 no-proverbs-message" data-original-message="No user-submitted proverbs available.">No user-submitted proverbs available.</p>
+            {% endif %}
+            <div class="mt-8 text-center">
+                <a href="{% url 'input_proverb' %}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg">
+                    Add New Proverb
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
