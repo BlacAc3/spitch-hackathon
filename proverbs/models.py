@@ -12,15 +12,31 @@ class Proverb(models.Model):
     text = models.TextField(verbose_name="Yoruba Proverb Text")
     translation = models.TextField(verbose_name="English Translation", blank=True, null=True)
     audio = models.FileField(upload_to='proverb_audio/', verbose_name="Audio (TTS)", blank=True, null=True)
+    encoded_audio = models.TextField(verbose_name="Encoded Audio", blank=True, null=True)
     tag = models.CharField(max_length=10, choices=TAG_CHOICES, default='system', verbose_name="Proverb Source")
 
     def __str__(self):
         text_str = str(self.text)
         return text_str[:50] + "..." if len(text_str) > 50 else text_str
 
+    @property
+    def encoded_audio_url(self):
+        """
+        Property to provide the base64 encoded audio as a data URL.
+        Access in Django template like:
+        <audio controls>
+            <source src="{{ proverb.encoded_audio_url }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        """
+        if self.encoded_audio:
+            return f"data:audio/mpeg;base64,{self.encoded_audio}"
+        return None
+
     class Meta:
         verbose_name = "Proverb"
         verbose_name_plural = "Proverbs"
+
 
 
 class ProverbRating(models.Model):

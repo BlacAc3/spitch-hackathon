@@ -112,14 +112,35 @@ def rate_proverb(request, proverb_id=None):
         q9 = request.POST.get('q9')    # Q9: Did you notice any background noise or artifacts?
         q10 = request.POST.get('q10')  # Q10: How would you rate the overall quality of the TTS audio?
 
+        # Store all questions in a dictionary to easily check for completeness
+        all_questions_data = {
+            'q1': q1, 'q2': q2, 'q3': q3, 'q4': q4, 'q5': q5,
+            'q6': q6, 'q7': q7, 'q8': q8, 'q9': q9, 'q10': q10
+        }
+
+        # Check if any required field is missing (None or empty string)
+        missing_fields = [key for key, value in all_questions_data.items() if not value]
+
+        if missing_fields:
+            # If there are missing fields, re-render the form with an error message
+            context = {
+                'proverb': proverb,
+                'proverb_rating': proverb_rating,
+                'error_message': f"Please answer all questions. Missing: {', '.join(f.upper() for f in missing_fields)}.",
+                **all_questions_data # Pass back submitted data to pre-populate the form
+            }
+            return render(request, 'proverbs/tts_rating.html', context)
+
+        # All fields are answered, proceed with calculations and saving
         competence_score, final_rating_value = _calculate_competence_and_final_rating(
             q1, q2, q3, q4, q6, q10, proverb_rating
         )
 
-        # Convert to int for saving where applicable
-        q4_int = int(q4) if q4 else 0
-        q6_int = int(q6) if q6 else 0
-        q10_int = int(q10) if q10 else 0
+        # Convert to int for saving where applicable.
+        # These are now guaranteed to have non-empty string values due to the check above.
+        q4_int = int(q4)
+        q6_int = int(q6)
+        q10_int = int(q10)
 
         # --- Save to Database ---
         current_user = request.user if request.user.is_authenticated else None
@@ -134,21 +155,23 @@ def rate_proverb(request, proverb_id=None):
                 final_rating=round(final_rating_value, 2)
             )
         else:
+            # For GeneralRating, since all q1-q10 are now guaranteed to be answered,
+            # we can directly assign q4, q5, q6, q7, q8, q9 without conditional checks.
             models.GeneralRating.objects.create(
                 user=current_user,
                 q1=q1, q2=q2, q3=q3,
-                q4=q4_int if q4 else None,
-                q5=q5 if q5 else None,
-                q6=q6_int if q6 else None,
-                q7=q7 if q7 else None,
-                q8=q8 if q8 else None,
-                q9=q9 if q9 else None,
+                q4=q4_int,
+                q5=q5,
+                q6=q6_int,
+                q7=q7,
+                q8=q8,
+                q9=q9,
                 q10=q10_int,
                 competence_score=competence_score,
                 final_rating=round(final_rating_value, 2)
             )
 
-        # Redirect back to the proverb list after submission
+        # Redirect back to the proverb list after successful submission
         return redirect('proverb_list')
     else:
         # Render the rating form for GET request
@@ -175,7 +198,10 @@ def tts_proverb(request, proverb_id):
     proverb = get_object_or_404(models.Proverb, pk=proverb_id)  # Fetch proverb by ID
     # encoded_audio = generate_tts(proverb.text)  # Generate TTS and get URL
     context = {'proverb': proverb}
-    # print(proverb.audio.url)
+    if not proverb.encoded_audio:
+        encoded_audio = generate_tts(proverb.text)
+        proverb.encoded_audio = encoded_audio
+        proverb.save()
     return render(request, 'proverbs/tts_proverb.html', context)
 
 

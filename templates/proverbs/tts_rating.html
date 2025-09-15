@@ -164,7 +164,7 @@
                             "{{ proverb.text }}"
                         </blockquote>
                         <audio controls class="w-full mt-4">
-                            <source src="{{ proverb.audio.url }}" type="audio/mpeg" />
+                            <source src="{{ proverb.encoded_audio_url }}" type="audio/mpeg" />
                             Your browser does not support the audio element.
                         </audio>
                     </div>
@@ -258,4 +258,52 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('tts-rating-form');
+            const questionNames = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
+
+            form.addEventListener('submit', function(event) {
+                let allQuestionsAnswered = true;
+                let firstUnansweredQuestionElement = null;
+
+                questionNames.forEach(name => {
+                    const radios = document.querySelectorAll(`input[name="${name}"]`);
+                    let isAnswered = false;
+                    radios.forEach(radio => {
+                        if (radio.checked) {
+                            isAnswered = true;
+                        }
+                    });
+
+                    if (!isAnswered) {
+                        allQuestionsAnswered = false;
+                        if (!firstUnansweredQuestionElement) {
+                        // Find the parent div of the question for scrolling
+                            const questionDiv = radios[0].closest('.mb-6');
+                            firstUnansweredQuestionElement = questionDiv;
+                        }
+                    }
+                });
+
+                if (!allQuestionsAnswered) {
+                    event.preventDefault(); // Stop form submission
+                    alert('Please answer all questions before submitting.');
+
+                // Scroll to the first unanswered question if found
+                    if (firstUnansweredQuestionElement) {
+                        firstUnansweredQuestionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Optionally, highlight the unanswered section
+                        firstUnansweredQuestionElement.style.border = '2px solid red';
+                        setTimeout(() => {
+                            firstUnansweredQuestionElement.style.border = ''; // Remove highlight after a short delay
+                        }, 3000);
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
