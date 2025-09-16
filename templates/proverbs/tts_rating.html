@@ -14,7 +14,7 @@
             Yoruba TTS Rating
         </h1>
 
-        <form id="tts-rating-form" method="post" action="{% url 'rate_proverb' proverb.id %}" class="space-y-8">
+        <form id="tts-rating-form" method="post" action="{% if proverb %}{% url 'rate_proverb' proverb.id %}{% else %}{% url 'rate_general' %}{% endif %}" class="space-y-8">
             {% csrf_token %}
 
             <!-- Section 1: Competence Check -->
