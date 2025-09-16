@@ -12,6 +12,7 @@ from django.core.files.base import ContentFile
 # Create your views here.
 
 
+@cache_page(60 * 60 * 24)  # Cache for 24 hours
 def home(request):
     return render(request, 'proverbs/home.html')
 
