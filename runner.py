@@ -7,10 +7,12 @@ def setup():
     # settings.configure() #Remove settings configure as django.setup does this.  If you call settings.configure after django.setup it will raise an error
     django.setup()
 
-def copy_proverbs_to_db():
+def refresh_proverbs():
     from proverbs.models import Proverb  # Import your Proverb model
     import csv
     csv_file_path = 'spitch_hackathon/proverbs.csv'  # Adjust path if needed
+    system_proverbs=Proverb.objects.filter(tag="system")
+    system_proverbs.delete()
 
     with open(csv_file_path, 'r', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
@@ -26,7 +28,7 @@ def copy_proverbs_to_db():
                 if not Proverb.objects.filter(text=text).exists():
 
                     # Create a new Proverb object and save it to the database
-                    proverb = Proverb(text=text, translation=translation)
+                    proverb = Proverb(text=text, translation=translation) #Role defaults to system
                     proverb.save()
                 else:
                     print(f"Proverb '{text}' already exists in the database. Skipping.")
@@ -39,4 +41,4 @@ def copy_proverbs_to_db():
 
 if __name__ == "__main__":
     setup() # Required to configure Django settings and initialize Django
-    copy_proverbs_to_db()
+    refresh_proverbs()
